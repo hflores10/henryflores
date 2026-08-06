@@ -1,0 +1,10 @@
+Manual - HTML y CSS base
+
+HTML organiza el contenido con etiquetas semanticas como header, main, section, article y footer.
+CSS define presentacion, espaciado, color, tipografia y comportamiento responsive.
+
+Recomendaciones:
+1. Usa nombres de clases claros.
+2. Mantén una estructura de carpetas simple.
+3. Evita estilos repetidos cuando puedas crear una clase reutilizable.
+4. Prueba el sitio en pantallas pequenas y grandes.

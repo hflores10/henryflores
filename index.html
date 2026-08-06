@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta
+      name="description"
+      content="Repositorio académico de Henry Flores con prácticas y manuales organizados por ciclo, curso, semana y sesión."
+    >
+    <title>Henry Flores | Repositorio Académico</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="js/catalogo.js" defer></script>
+    <script src="js/app.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="./" aria-label="Ir al inicio">
+          <span class="brand-mark" aria-hidden="true">HF</span>
+          <span>Henry Flores</span>
+        </a>
+
+        <nav class="top-nav" aria-label="Navegación principal">
+          <a href="#catalogo">Catálogo</a>
+          <a href="#recientes">Recientes</a>
+          <a href="#contacto">Contacto</a>
+        </nav>
+
+        <button class="icon-button" id="themeToggle" type="button" title="Cambiar tema" aria-label="Cambiar tema">
+          <span aria-hidden="true">◐</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="page-shell">
+      <section class="workspace-hero" id="catalogo" aria-labelledby="pageTitle">
+        <div class="hero-copy">
+          <p class="eyebrow">Repositorio académico</p>
+          <h1 id="pageTitle">Materiales por ciclo, curso, semana y sesión.</h1>
+          <p class="intro">
+            Prácticas y manuales listos para consultar o descargar desde una estructura pensada para GitHub Pages.
+          </p>
+        </div>
+
+        <div class="hero-stats" aria-label="Resumen del catálogo">
+          <div>
+            <strong id="cycleCount">0</strong>
+            <span>ciclos</span>
+          </div>
+          <div>
+            <strong id="courseCount">0</strong>
+            <span>cursos</span>
+          </div>
+          <div>
+            <strong id="fileCount">0</strong>
+            <span>archivos</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="catalog-toolbar" aria-label="Herramientas del catálogo">
+        <button class="icon-button" id="backButton" type="button" title="Volver" aria-label="Volver">
+          <span aria-hidden="true">←</span>
+        </button>
+
+        <nav class="breadcrumbs" id="breadcrumbs" aria-label="Ruta actual"></nav>
+
+        <form class="search-box" id="searchForm" role="search">
+          <label class="sr-only" for="searchInput">Buscar materiales</label>
+          <span aria-hidden="true">⌕</span>
+          <input id="searchInput" type="search" placeholder="Buscar práctica, manual o curso">
+          <button id="clearSearch" type="button" title="Limpiar búsqueda" aria-label="Limpiar búsqueda">
+            <span aria-hidden="true">×</span>
+          </button>
+        </form>
+      </section>
+
+      <section class="catalog-layout">
+        <section class="browser-panel" aria-labelledby="browserTitle">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow" id="levelLabel">Ciclos disponibles</p>
+              <h2 id="browserTitle">Selecciona un ciclo</h2>
+            </div>
+            <span class="result-count" id="resultCount">0 elementos</span>
+          </div>
+
+          <div class="folder-grid" id="folderGrid"></div>
+
+          <div class="empty-state" id="emptyState" hidden>
+            <strong>No hay resultados</strong>
+            <span>Prueba con otro término o vuelve a la ruta principal.</span>
+          </div>
+        </section>
+
+        <aside class="details-panel" aria-labelledby="detailsTitle">
+          <p class="eyebrow">Detalle</p>
+          <h2 id="detailsTitle">Catálogo completo</h2>
+          <p id="detailsDescription">
+            Navega por las carpetas para llegar a las prácticas y manuales de cada sesión.
+          </p>
+
+          <dl class="details-list" id="detailsList"></dl>
+
+          <div class="download-stack" id="quickDownloads"></div>
+        </aside>
+      </section>
+
+      <section class="recent-section" id="recientes" aria-labelledby="recentTitle">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">Actualizaciones</p>
+            <h2 id="recentTitle">Materiales recientes</h2>
+          </div>
+        </div>
+        <div class="recent-grid" id="recentGrid"></div>
+      </section>
+
+      <section class="contact-band" id="contacto">
+        <div>
+          <p class="eyebrow">Contacto</p>
+          <h2>Henry Richard Flores Bazurto</h2>
+          <p>Desarrollo web Full-Stack, documentación técnica y soporte orientado a resultados.</p>
+        </div>
+        <div class="contact-actions">
+          <a class="primary-button" href="https://github.com/hflore10">GitHub</a>
+          <a class="secondary-button" href="https://github.com/hflore10/henryflores">Repositorio</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span>© 2026 Henry Flores.</span>
+      <a href="#catalogo">Volver arriba</a>
+    </footer>
+  </body>
+</html>

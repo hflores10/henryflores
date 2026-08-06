@@ -1,0 +1,13 @@
+Practica 02 - Navegacion dinamica
+
+Objetivo:
+Renderizar una lista desde JavaScript y actualizar la vista cuando el usuario selecciona un elemento.
+
+Entregable:
+Una pagina con datos en un arreglo, eventos click y actualizacion del DOM.
+
+Puntos clave:
+1. Separar datos y presentacion.
+2. Usar addEventListener.
+3. Evitar repetir HTML manualmente.
+4. Mantener estados simples.

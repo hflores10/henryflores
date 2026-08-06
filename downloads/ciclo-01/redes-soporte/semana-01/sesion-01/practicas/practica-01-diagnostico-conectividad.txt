@@ -1,0 +1,11 @@
+Practica 01 - Diagnostico de conectividad
+
+Objetivo:
+Identificar una falla comun de red usando una secuencia de revision ordenada.
+
+Actividades:
+1. Validar conexion fisica o Wi-Fi.
+2. Revisar direccion IP.
+3. Probar puerta de enlace.
+4. Probar resolucion DNS.
+5. Documentar evidencia y conclusion.

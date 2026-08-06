@@ -1,0 +1,11 @@
+Manual - Listas enlazadas
+
+Una lista enlazada guarda datos en nodos conectados por referencias.
+
+Conceptos:
+1. Nodo: contiene valor y referencia al siguiente nodo.
+2. Cabeza: primer nodo de la lista.
+3. Insercion: ajusta referencias sin mover todos los elementos.
+4. Eliminacion: considera lista vacia, primer nodo y nodo intermedio.
+
+Antes de programar, dibuja las referencias para evitar errores.

@@ -1,0 +1,13 @@
+Manual - JavaScript DOM
+
+El DOM permite leer y modificar el documento HTML desde JavaScript.
+
+Metodos frecuentes:
+1. document.querySelector(selector)
+2. element.addEventListener(evento, funcion)
+3. element.innerHTML
+4. element.classList.add(nombre)
+5. element.dataset
+
+Consejo:
+Trabaja con funciones pequenas para que cada parte de la interfaz sea facil de mantener.

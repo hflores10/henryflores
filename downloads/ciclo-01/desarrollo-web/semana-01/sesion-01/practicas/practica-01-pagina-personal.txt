@@ -1,0 +1,14 @@
+Practica 01 - Pagina personal
+
+Objetivo:
+Crear una pagina personal con estructura HTML semantica, navegacion interna y estilos base.
+
+Entregable:
+Un archivo index.html y una carpeta css con el archivo styles.css.
+
+Checklist:
+1. Encabezado con nombre y navegacion.
+2. Seccion sobre mi.
+3. Seccion de habilidades.
+4. Seccion de contacto.
+5. Diseno responsive basico.

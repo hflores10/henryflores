@@ -1,0 +1,8 @@
+Manual - Checklist de red
+
+Secuencia sugerida:
+1. Confirmar alcance de la incidencia.
+2. Verificar energia, cableado y adaptador.
+3. Revisar IP, mascara, puerta de enlace y DNS.
+4. Probar ping local, gateway y dominio externo.
+5. Registrar hallazgos antes de aplicar cambios.

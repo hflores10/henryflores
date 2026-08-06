@@ -1,0 +1,11 @@
+Manual - Complejidad basica
+
+La complejidad ayuda a estimar como crece el tiempo de ejecucion de un algoritmo.
+
+Referencias rapidas:
+1. O(1): tiempo constante.
+2. O(log n): crecimiento logaritmico.
+3. O(n): crecimiento lineal.
+4. O(n^2): doble recorrido anidado.
+
+Evalua siempre el caso mas representativo para el problema.

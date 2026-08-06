@@ -1,0 +1,10 @@
+Practica 01 - Pseudocodigo
+
+Objetivo:
+Resolver problemas simples usando entrada, proceso, salida y condicionales.
+
+Ejercicios:
+1. Calcular promedio de tres notas.
+2. Determinar si un numero es par o impar.
+3. Convertir grados Celsius a Fahrenheit.
+4. Mostrar el mayor de dos numeros.

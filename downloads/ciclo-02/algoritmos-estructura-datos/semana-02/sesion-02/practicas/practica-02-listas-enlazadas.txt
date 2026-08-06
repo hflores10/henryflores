@@ -1,0 +1,13 @@
+Practica 02 - Listas enlazadas
+
+Objetivo:
+Implementar operaciones basicas sobre una lista enlazada simple.
+
+Operaciones:
+1. Insertar al inicio.
+2. Insertar al final.
+3. Buscar por valor.
+4. Eliminar un nodo.
+5. Recorrer la lista.
+
+Incluye pruebas para lista vacia, un solo nodo y varios nodos.
