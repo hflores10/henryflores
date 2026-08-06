@@ -8,7 +8,7 @@ const crearMaterialPendiente = (cursoId, carpeta, titulo, descripcion) => ({
   href: `downloads/ciclo-03/${cursoId}/${carpeta}/sube-aqui.txt`,
 });
 
-const crearCursoCiclo3 = ({ id, codigo, nombre, creditos, horas, requisitos }) => ({
+const crearCursoCiclo3 = ({ id, codigo, nombre, creditos, horas, requisitos, manualCurso, silabo }) => ({
   id,
   codigo,
   nombre,
@@ -17,22 +17,26 @@ const crearCursoCiclo3 = ({ id, codigo, nombre, creditos, horas, requisitos }) =
   requisitos,
   descripcion: `${codigo} · ${creditos} créditos · ${horas.total} total.`,
   documentos: {
-    manualCurso: [
-      crearMaterialPendiente(
-        id,
-        "manual-del-curso",
-        `Manual del curso - ${nombre}`,
-        "Espacio reservado para el manual oficial o separata principal del curso."
-      ),
-    ],
-    silabo: [
-      crearMaterialPendiente(
-        id,
-        "silabo",
-        `Sílabo - ${nombre}`,
-        "Espacio reservado para el sílabo del curso."
-      ),
-    ],
+    manualCurso: manualCurso
+      ? [manualCurso]
+      : [
+          crearMaterialPendiente(
+            id,
+            "manual-del-curso",
+            `Manual del curso - ${nombre}`,
+            "Espacio reservado para el manual oficial o separata principal del curso."
+          ),
+        ],
+    silabo: silabo
+      ? [silabo]
+      : [
+          crearMaterialPendiente(
+            id,
+            "silabo",
+            `Sílabo - ${nombre}`,
+            "Espacio reservado para el sílabo del curso."
+          ),
+        ],
   },
   semanas: [
     {
@@ -280,6 +284,22 @@ window.CATALOGO_ACADEMICO = {
           creditos: 5,
           horas: { teo: "0h", lab: "0h", otros: "5h", total: "5h" },
           requisitos: "Modelado de Procesos de Negocio o PRNG2389",
+          manualCurso: {
+            titulo: "Manual del curso - Análisis y Diseño de Sistemas I",
+            descripcion: "Manual oficial del curso en formato PDF.",
+            tipo: "PDF",
+            tamano: "17.8 MB",
+            actualizado: "2026-08-06",
+            href: "downloads/ciclo-03/analisis-diseno-sistemas-i/manual-del-curso/3.- ManualdelCursoenPDF.pdf",
+          },
+          silabo: {
+            titulo: "Sílabo - Análisis y Diseño de Sistemas I",
+            descripcion: "Sílabo del curso en formato PDF.",
+            tipo: "PDF",
+            tamano: "257 KB",
+            actualizado: "2026-08-06",
+            href: "downloads/ciclo-03/analisis-diseno-sistemas-i/silabo/Silabo_del_curso.pdf",
+          },
         }),
         crearCursoCiclo3({
           id: "experiencia-formativa-situacion-real-trabajo",
