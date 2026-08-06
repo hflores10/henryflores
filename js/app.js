@@ -8,7 +8,7 @@
   const labelsByDepth = [
     "Ciclos disponibles",
     "Cursos del ciclo",
-    "Semanas del curso",
+    "Carpetas del curso",
     "Sesiones de la semana",
     "Carpetas de la sesión",
     "Archivos descargables",
@@ -17,10 +17,48 @@
   const titlesByDepth = [
     "Selecciona un ciclo",
     "Selecciona un curso",
-    "Selecciona una semana",
+    "Selecciona documentos o una semana",
     "Selecciona una sesión",
-    "Selecciona prácticas o manuales",
+    "Selecciona prácticas, manuales o exámenes",
     "Descarga el material",
+  ];
+
+  const courseDocumentDefinitions = [
+    {
+      id: "manual-del-curso",
+      key: "manualCurso",
+      nombre: "Manual del curso",
+      descripcion: "Guía principal, separatas o manual institucional del curso.",
+      meta: "Documentos del curso",
+    },
+    {
+      id: "silabo",
+      key: "silabo",
+      nombre: "Sílabo",
+      descripcion: "Plan de contenidos, evaluación, competencias y bibliografía.",
+      meta: "Documentos del curso",
+    },
+  ];
+
+  const sessionDocumentDefinitions = [
+    {
+      id: "practicas",
+      key: "practicas",
+      nombre: "Prácticas",
+      descripcion: "Ejercicios, retos y evidencias descargables.",
+    },
+    {
+      id: "manuales",
+      key: "manuales",
+      nombre: "Manuales",
+      descripcion: "Guías, lecturas y referencias de la sesión.",
+    },
+    {
+      id: "examenes",
+      key: "examenes",
+      nombre: "Exámenes",
+      descripcion: "Evaluaciones, bancos de preguntas y simulacros.",
+    },
   ];
 
   const nodes = {
@@ -72,7 +110,6 @@
         state.query = "";
         nodes.searchInput.value = "";
         render();
-        return;
       }
     });
 
@@ -126,19 +163,25 @@
 
   function render() {
     const query = normalize(state.query);
-    const results = query ? searchFiles(query) : getCurrentItems();
-    const isFileLevel = query || state.path.length === 5;
+    const view = query
+      ? {
+          items: searchFiles(query),
+          isFileLevel: true,
+          label: "Resultados de búsqueda",
+          title: `Resultados para "${state.query}"`,
+        }
+      : getCurrentView();
 
     nodes.backButton.disabled = state.path.length === 0;
-    nodes.levelLabel.textContent = query ? "Resultados de búsqueda" : labelsByDepth[state.path.length];
-    nodes.browserTitle.textContent = query ? `Resultados para "${state.query}"` : titlesByDepth[state.path.length];
-    nodes.resultCount.textContent = `${results.length} ${results.length === 1 ? "elemento" : "elementos"}`;
+    nodes.levelLabel.textContent = view.label;
+    nodes.browserTitle.textContent = view.title;
+    nodes.resultCount.textContent = `${view.items.length} ${view.items.length === 1 ? "elemento" : "elementos"}`;
 
     renderBreadcrumbs();
-    renderGrid(results, isFileLevel);
+    renderGrid(view.items, view.isFileLevel);
     renderDetails(query ? null : getSelectedTrail());
 
-    nodes.emptyState.hidden = results.length > 0;
+    nodes.emptyState.hidden = view.items.length > 0;
   }
 
   function renderBreadcrumbs() {
@@ -191,6 +234,7 @@
   function renderFileCard(item) {
     const title = item.titulo || item.nombre;
     const trail = item.trail ? `<span class="badge rose">${escapeHtml(item.trail)}</span>` : "";
+    const status = item.estado ? `<span class="badge warning">${escapeHtml(item.estado)}</span>` : "";
 
     return `
       <article class="item-card">
@@ -204,6 +248,7 @@
         <div class="meta-row">
           <span class="badge">${escapeHtml(item.tipo || "Archivo")}</span>
           <span class="badge">${escapeHtml(item.tamano || "Disponible")}</span>
+          ${status}
           ${trail}
         </div>
         <div class="card-actions">
@@ -216,7 +261,7 @@
 
   function renderDetails(trail) {
     const selected = trail && trail.length ? trail[trail.length - 1] : null;
-    const sessionFiles = getFilesForCurrentContext();
+    const contextFiles = getFilesForCurrentContext();
 
     nodes.detailsTitle.textContent = selected ? selected.nombre || selected.titulo : "Catálogo completo";
     nodes.detailsDescription.textContent = selected
@@ -224,11 +269,7 @@
       : "Navega por las carpetas para llegar a las prácticas y manuales de cada sesión.";
 
     const detailRows = selected
-      ? [
-          ["Ruta", buildCurrentPathLabel(trail)],
-          ["Siguiente", labelsByDepth[Math.min(state.path.length + 1, labelsByDepth.length - 1)]],
-          ["Archivos", `${sessionFiles.length} disponibles`],
-        ]
+      ? buildDetailRows(selected, trail, contextFiles.length)
       : [
           ["Ciclos", String(catalog.ciclos.length)],
           ["Cursos", String(catalog.ciclos.flatMap((cycle) => cycle.cursos).length)],
@@ -239,8 +280,8 @@
       .map(([label, value]) => `<div><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd></div>`)
       .join("");
 
-    nodes.quickDownloads.innerHTML = sessionFiles.length
-      ? sessionFiles
+    nodes.quickDownloads.innerHTML = contextFiles.length
+      ? contextFiles
           .slice(0, 5)
           .map(
             (file) => `
@@ -262,129 +303,150 @@
     nodes.recentGrid.innerHTML = recent.map(renderFileCard).join("");
   }
 
+  function getCurrentView() {
+    const items = getCurrentItems();
+    const isFileLevel = items.length > 0 && items.every((item) => item.href);
+    const depth = Math.min(state.path.length, labelsByDepth.length - 1);
+
+    return {
+      items,
+      isFileLevel,
+      label: isFileLevel ? "Archivos descargables" : labelsByDepth[depth],
+      title: isFileLevel ? "Descarga el material" : titlesByDepth[depth],
+    };
+  }
+
   function getCurrentItems() {
-    const [cycleId, courseId, weekId, sessionId, categoryId] = state.path;
+    const [cycleId, courseId, courseChildId, sessionId, categoryId] = state.path;
+    const { cycle, course, courseChild, week, session, category } = resolvePath();
 
     if (!cycleId) return catalog.ciclos;
-
-    const cycle = catalog.ciclos.find((item) => item.id === cycleId);
     if (!courseId) return cycle?.cursos || [];
-
-    const course = cycle?.cursos.find((item) => item.id === courseId);
-    if (!weekId) return course?.semanas || [];
-
-    const week = course?.semanas.find((item) => item.id === weekId);
+    if (!courseChildId) return getCourseChildren(course);
+    if (courseChild?.files) return courseChild.files;
     if (!sessionId) return week?.sesiones || [];
-
-    const session = week?.sesiones.find((item) => item.id === sessionId);
     if (!categoryId) return getSessionCategories(session);
 
-    return categoryId === "practicas" ? session?.practicas || [] : session?.manuales || [];
+    return category?.files || [];
   }
 
   function getSelectedTrail() {
     const trail = [];
-    const [cycleId, courseId, weekId, sessionId, categoryId] = state.path;
+    const { cycle, course, courseChild, session, category } = resolvePath();
+
+    if (cycle) trail.push(cycle);
+    if (course) trail.push(course);
+    if (courseChild) trail.push(courseChild);
+    if (session) trail.push(session);
+    if (category) trail.push(category);
+
+    return trail;
+  }
+
+  function resolvePath() {
+    const [cycleId, courseId, courseChildId, sessionId, categoryId] = state.path;
     const cycle = catalog.ciclos.find((item) => item.id === cycleId);
-    if (!cycle) return trail;
-    trail.push(cycle);
+    const course = cycle?.cursos.find((item) => item.id === courseId);
+    const courseChild = course ? getCourseChildren(course).find((item) => item.id === courseChildId) : null;
+    const week = courseChild && !courseChild.files ? courseChild : null;
+    const session = week?.sesiones.find((item) => item.id === sessionId);
+    const category = session ? getSessionCategories(session).find((item) => item.id === categoryId) : null;
 
-    const course = cycle.cursos.find((item) => item.id === courseId);
-    if (!course) return trail;
-    trail.push(course);
+    return { cycle, course, courseChild, week, session, category };
+  }
 
-    const week = course.semanas.find((item) => item.id === weekId);
-    if (!week) return trail;
-    trail.push(week);
+  function getCourseChildren(course) {
+    if (!course) return [];
 
-    const session = week.sesiones.find((item) => item.id === sessionId);
-    if (!session) return trail;
-    trail.push(session);
+    const documentFolders = courseDocumentDefinitions
+      .map((definition) => {
+        const files = course.documentos?.[definition.key] || [];
+        if (!files.length) return null;
 
-    if (categoryId) {
-      trail.push(getSessionCategories(session).find((item) => item.id === categoryId));
-    }
+        return {
+          id: definition.id,
+          nombre: definition.nombre,
+          descripcion: definition.descripcion,
+          files,
+          count: files.length,
+          meta: definition.meta,
+        };
+      })
+      .filter(Boolean);
 
-    return trail.filter(Boolean);
+    return documentFolders.concat(course.semanas || []);
   }
 
   function getSessionCategories(session) {
     if (!session) return [];
-    return [
-      {
-        id: "practicas",
-        nombre: "Prácticas",
-        descripcion: "Ejercicios, retos y evidencias descargables.",
-        count: session.practicas.length,
-        meta: "Carpeta",
-      },
-      {
-        id: "manuales",
-        nombre: "Manuales",
-        descripcion: "Guías, lecturas y referencias de la sesión.",
-        count: session.manuales.length,
-        meta: "Carpeta",
-      },
-    ];
+
+    return sessionDocumentDefinitions
+      .map((definition) => {
+        const files = session[definition.key] || [];
+        if (!files.length) return null;
+
+        return {
+          id: definition.id,
+          nombre: definition.nombre,
+          descripcion: definition.descripcion,
+          files,
+          count: files.length,
+          meta: "Carpeta",
+        };
+      })
+      .filter(Boolean);
   }
 
   function getFilesForCurrentContext() {
-    const [cycleId, courseId, weekId, sessionId, categoryId] = state.path;
-    if (!cycleId) return collectFiles();
+    if (!state.path.length) return collectFiles();
 
-    const files = collectFiles().filter((file) => {
-      const path = file.path;
-      return (
-        (!cycleId || path.cycleId === cycleId) &&
-        (!courseId || path.courseId === courseId) &&
-        (!weekId || path.weekId === weekId) &&
-        (!sessionId || path.sessionId === sessionId) &&
-        (!categoryId || path.categoryId === categoryId)
-      );
-    });
-
-    return files;
+    return collectFiles().filter((file) =>
+      state.path.every((pathId, index) => file.ancestors[index] === pathId)
+    );
   }
 
   function collectFiles() {
     const files = [];
+
     catalog.ciclos.forEach((cycle) => {
       cycle.cursos.forEach((course) => {
-        course.semanas.forEach((week) => {
-          week.sesiones.forEach((session) => {
-            [
-              ["practicas", "Prácticas", session.practicas],
-              ["manuales", "Manuales", session.manuales],
-            ].forEach(([categoryId, categoryLabel, items]) => {
-              items.forEach((file) => {
-                files.push({
-                  ...file,
-                  trail: `${cycle.nombre} / ${course.nombre} / ${week.nombre} / ${session.nombre} / ${categoryLabel}`,
-                  path: {
-                    cycleId: cycle.id,
-                    courseId: course.id,
-                    weekId: week.id,
-                    sessionId: session.id,
-                    categoryId,
-                  },
-                });
-              });
+        getCourseChildren(course)
+          .filter((folder) => folder.files)
+          .forEach((folder) => {
+            addFiles(files, folder.files, [cycle, course, folder], [cycle.id, course.id, folder.id]);
+          });
+
+        (course.semanas || []).forEach((week) => {
+          (week.sesiones || []).forEach((session) => {
+            getSessionCategories(session).forEach((category) => {
+              addFiles(
+                files,
+                category.files,
+                [cycle, course, week, session, category],
+                [cycle.id, course.id, week.id, session.id, category.id]
+              );
             });
           });
         });
       });
     });
+
     return files;
+  }
+
+  function addFiles(target, files, trailEntries, ancestors) {
+    files.forEach((file) => {
+      target.push({
+        ...file,
+        trail: trailEntries.map((entry) => entry.nombre).join(" / "),
+        ancestors,
+      });
+    });
   }
 
   function searchFiles(query) {
     return collectFiles().filter((file) => {
-      const haystack = [
-        file.titulo,
-        file.descripcion,
-        file.tipo,
-        file.trail,
-      ]
+      const haystack = [file.titulo, file.descripcion, file.tipo, file.trail]
         .map(normalize)
         .join(" ");
 
@@ -394,18 +456,50 @@
 
   function countChildren(item) {
     if (item.cursos) return item.cursos.length;
-    if (item.semanas) return item.semanas.length;
+    if (item.codigo) return getCourseChildren(item).length;
+    if (item.files) return item.files.length;
     if (item.sesiones) return item.sesiones.length;
-    if (item.practicas || item.manuales) return (item.practicas?.length || 0) + (item.manuales?.length || 0);
+    if (item.practicas || item.manuales || item.examenes) return getSessionCategories(item).length;
+    if (item.semanas) return item.semanas.length;
     return 0;
   }
 
   function getMetaLabel(item) {
     if (item.cursos) return "Ciclo";
+    if (item.codigo) return `${item.codigo}${item.creditos ? ` · ${item.creditos} créditos` : ""}`;
+    if (item.files) return "Documentos";
     if (item.semanas) return "Curso";
     if (item.sesiones) return "Semana";
-    if (item.practicas || item.manuales) return "Sesión";
+    if (item.practicas || item.manuales || item.examenes) return "Sesión";
     return "Carpeta";
+  }
+
+  function buildDetailRows(selected, trail, fileCount) {
+    const rows = [["Ruta", buildCurrentPathLabel(trail)]];
+
+    if (selected.codigo) {
+      rows.push(["Código", selected.codigo]);
+      rows.push(["Créditos", String(selected.creditos || "No indicado")]);
+      rows.push(["Horas", formatHours(selected.horas)]);
+      rows.push(["Requisitos", selected.requisitos || "No tiene requisitos."]);
+    }
+
+    rows.push(["Siguiente", getNextLabel()]);
+    rows.push(["Archivos", `${fileCount} disponibles`]);
+
+    return rows;
+  }
+
+  function getNextLabel() {
+    const items = getCurrentItems();
+    if (items.length > 0 && items.every((item) => item.href)) return "Descarga";
+
+    return labelsByDepth[Math.min(state.path.length + 1, labelsByDepth.length - 1)];
+  }
+
+  function formatHours(hours) {
+    if (!hours) return "No indicado";
+    return `TEO ${hours.teo} · LAB ${hours.lab} · Otros ${hours.otros} · Total ${hours.total}`;
   }
 
   function buildCurrentPathLabel(trail) {

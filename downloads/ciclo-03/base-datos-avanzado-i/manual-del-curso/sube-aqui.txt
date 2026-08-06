@@ -1,0 +1,4 @@
+Placeholder para Manual del curso - Base de Datos Avanzado I.
+
+Reemplaza este archivo por el documento real o sube el PDF/DOCX en esta misma carpeta.
+Si cambias el nombre o formato del archivo, actualiza la ruta en js/catalogo.js.

@@ -1,0 +1,4 @@
+Placeholder para Silabo - Analisis y Diseno de Sistemas I.
+
+Reemplaza este archivo por el documento real o sube el PDF/DOCX en esta misma carpeta.
+Si cambias el nombre o formato del archivo, actualiza la ruta en js/catalogo.js.

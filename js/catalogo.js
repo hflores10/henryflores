@@ -1,8 +1,76 @@
+const crearMaterialPendiente = (cursoId, carpeta, titulo, descripcion) => ({
+  titulo,
+  descripcion,
+  tipo: "TXT",
+  tamano: "1 KB",
+  actualizado: "2026-08-06",
+  estado: "Pendiente",
+  href: `downloads/ciclo-03/${cursoId}/${carpeta}/sube-aqui.txt`,
+});
+
+const crearCursoCiclo3 = ({ id, codigo, nombre, creditos, horas, requisitos }) => ({
+  id,
+  codigo,
+  nombre,
+  creditos,
+  horas,
+  requisitos,
+  descripcion: `${codigo} · ${creditos} créditos · ${horas.total} total.`,
+  documentos: {
+    manualCurso: [
+      crearMaterialPendiente(
+        id,
+        "manual-del-curso",
+        `Manual del curso - ${nombre}`,
+        "Espacio reservado para el manual oficial o separata principal del curso."
+      ),
+    ],
+    silabo: [
+      crearMaterialPendiente(
+        id,
+        "silabo",
+        `Sílabo - ${nombre}`,
+        "Espacio reservado para el sílabo del curso."
+      ),
+    ],
+  },
+  semanas: [
+    {
+      id: "semana-01",
+      nombre: "Semana 1",
+      descripcion: "Carpeta inicial para organizar sesiones y materiales del curso.",
+      sesiones: [
+        {
+          id: "sesion-01",
+          nombre: "Sesión 1",
+          tema: "Materiales iniciales del curso",
+          practicas: [
+            crearMaterialPendiente(
+              id,
+              "semana-01/sesion-01/practicas",
+              `Prácticas - ${nombre}`,
+              "Espacio reservado para prácticas, laboratorios o evidencias."
+            ),
+          ],
+          examenes: [
+            crearMaterialPendiente(
+              id,
+              "semana-01/sesion-01/examenes",
+              `Exámenes - ${nombre}`,
+              "Espacio reservado para exámenes, simulacros o bancos de preguntas."
+            ),
+          ],
+        },
+      ],
+    },
+  ],
+});
+
 window.CATALOGO_ACADEMICO = {
   propietario: {
     nombre: "Henry Richard Flores Bazurto",
     etiqueta: "Desarrollo Web Full-Stack + Redes",
-    github: "https://github.com/hflore10/henryflores",
+    github: "https://github.com/hflores10/henryflores",
   },
   ciclos: [
     {
@@ -198,6 +266,69 @@ window.CATALOGO_ACADEMICO = {
             },
           ],
         },
+      ],
+    },
+    {
+      id: "ciclo-03",
+      nombre: "Ciclo 3",
+      descripcion: "Nivel 3: análisis, programación, bases de datos, experiencia formativa y habilidades profesionales.",
+      cursos: [
+        crearCursoCiclo3({
+          id: "analisis-diseno-sistemas-i",
+          codigo: "DCGS5362",
+          nombre: "Análisis y Diseño de Sistemas I",
+          creditos: 5,
+          horas: { teo: "0h", lab: "0h", otros: "5h", total: "5h" },
+          requisitos: "Modelado de Procesos de Negocio o PRNG2389",
+        }),
+        crearCursoCiclo3({
+          id: "experiencia-formativa-situacion-real-trabajo",
+          codigo: "EFSR5590",
+          nombre: "Experiencia Formativa en Situación Real de Trabajo",
+          creditos: 1,
+          horas: { teo: "0h", lab: "0h", otros: "2h", total: "2h" },
+          requisitos: "Experiencia Formativa en Situación Real de Trabajo o EFSR4904",
+        }),
+        crearCursoCiclo3({
+          id: "desarrollo-habilidades-profesionales-iii",
+          codigo: "EMPL5398",
+          nombre: "Desarrollo de Habilidades Profesionales III",
+          creditos: 3,
+          horas: { teo: "0h", lab: "0h", otros: "4h", total: "4h" },
+          requisitos: "No tiene requisitos.",
+        }),
+        crearCursoCiclo3({
+          id: "base-datos-avanzado-i",
+          codigo: "GDAT5374",
+          nombre: "Base de Datos Avanzado I",
+          creditos: 3,
+          horas: { teo: "0h", lab: "0h", otros: "3h", total: "3h" },
+          requisitos: "Base de Datos o GDAT4685 o GDAT2349",
+        }),
+        crearCursoCiclo3({
+          id: "gestion-datos-dinamicos",
+          codigo: "GDAT5460",
+          nombre: "Gestión de Datos Dinámicos",
+          creditos: 2,
+          horas: { teo: "0h", lab: "0h", otros: "4h", total: "4h" },
+          requisitos: "Matemática II o MATE1813",
+        }),
+        crearCursoCiclo3({
+          id: "lenguaje-programacion-i",
+          codigo: "PROG5483",
+          nombre: "Lenguaje de Programación I",
+          creditos: 3,
+          horas: { teo: "0h", lab: "0h", otros: "4h", total: "4h" },
+          requisitos: "Algoritmos y Estructura de Datos o ALED4683 o ALED1814 o ALED7670",
+        }),
+        crearCursoCiclo3({
+          id: "programacion-orientada-objetos-i",
+          codigo: "PROG5505",
+          nombre: "Programación Orientada a Objetos I",
+          creditos: 3,
+          horas: { teo: "0h", lab: "0h", otros: "4h", total: "4h" },
+          requisitos: "Desarrollo de Entornos Web o PROG4684 o PROG2351 o PROG7672",
+        }),
       ],
     },
   ],
