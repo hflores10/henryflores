@@ -10,9 +10,17 @@ Sitio web estático para GitHub Pages con un navegador de materiales académicos
 - `js/app.js`: lógica del navegador.
 - `downloads/`: archivos que se descargan desde la web.
 
-## Ciclo 3
+## Ciclos académicos
 
-Se agregó el Nivel 3 con estos cursos:
+El catálogo incluye los ciclos 1, 2, 3 y 4. Para los ciclos 3 y 4, cada curso tiene:
+
+- `manual-del-curso`
+- `silabo`
+- `semana-01` a `semana-05`
+- 2 sesiones por semana hasta completar `sesion-01` a `sesion-10`
+- carpetas `practicas` y `examenes` dentro de cada sesión
+
+## Ciclo 3
 
 - `DCGS5362`: Análisis y Diseño de Sistemas I.
 - `EFSR5590`: Experiencia Formativa en Situación Real de Trabajo.
@@ -22,14 +30,17 @@ Se agregó el Nivel 3 con estos cursos:
 - `PROG5483`: Lenguaje de Programación I.
 - `PROG5505`: Programación Orientada a Objetos I.
 
-Cada curso tiene carpetas preparadas para:
+## Ciclo 4
 
-- `manual-del-curso`
-- `silabo`
-- `semana-01/sesion-01/practicas`
-- `semana-01/sesion-01/examenes`
+- `EFSR5591`: Experiencia Formativa en Situación Real de Trabajo.
+- `EMPL5399`: Desarrollo de Habilidades Profesionales IV.
+- `GDAT5375`: Base de Datos Avanzado II.
+- `PROG5484`: Lenguaje de Programación II.
+- `PROG5506`: Programación Orientada a Objetos II.
+- `SPTI5445`: Gestión de Servicios de TI.
+- `DCGS5363`: Análisis y Diseño de Sistemas II.
 
-GitHub no publica carpetas vacías, por eso cada carpeta incluye `sube-aqui.txt`. Cuando tengas los documentos reales, reemplaza ese archivo o sube el PDF/DOCX en la misma carpeta y actualiza su ruta, tipo y tamaño en `js/catalogo.js`.
+GitHub no publica carpetas vacías, por eso cada carpeta preparada incluye `sube-aqui.txt`. Cuando tengas los documentos reales, reemplaza ese archivo o sube el PDF/DOCX en la misma carpeta y actualiza su ruta, tipo y tamaño en `js/catalogo.js`.
 
 ## Publicación en GitHub Pages
 

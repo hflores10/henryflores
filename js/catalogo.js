@@ -1,14 +1,73 @@
-const crearMaterialPendiente = (cursoId, carpeta, titulo, descripcion) => ({
+const FECHA_ACTUALIZACION = "2026-08-06";
+
+const dosDigitos = (numero) => String(numero).padStart(2, "0");
+
+const crearMaterialPendiente = (cicloId, cursoId, carpeta, titulo, descripcion) => ({
   titulo,
   descripcion,
   tipo: "TXT",
   tamano: "1 KB",
-  actualizado: "2026-08-06",
+  actualizado: FECHA_ACTUALIZACION,
   estado: "Pendiente",
-  href: `downloads/ciclo-03/${cursoId}/${carpeta}/sube-aqui.txt`,
+  href: `downloads/${cicloId}/${cursoId}/${carpeta}/sube-aqui.txt`,
 });
 
-const crearCursoCiclo3 = ({ id, codigo, nombre, creditos, horas, requisitos, manualCurso, silabo }) => ({
+const crearSesiones = (cicloId, cursoId, nombreCurso, semanaNumero) =>
+  [1, 2].map((posicion) => {
+    const sesionNumero = (semanaNumero - 1) * 2 + posicion;
+    const semanaId = `semana-${dosDigitos(semanaNumero)}`;
+    const sesionId = `sesion-${dosDigitos(sesionNumero)}`;
+
+    return {
+      id: sesionId,
+      nombre: `Sesión ${sesionNumero}`,
+      tema: `Materiales de ${nombreCurso} - Sesión ${sesionNumero}`,
+      practicas: [
+        crearMaterialPendiente(
+          cicloId,
+          cursoId,
+          `${semanaId}/${sesionId}/practicas`,
+          `Prácticas - ${nombreCurso} - Sesión ${sesionNumero}`,
+          "Espacio reservado para prácticas, laboratorios o evidencias."
+        ),
+      ],
+      examenes: [
+        crearMaterialPendiente(
+          cicloId,
+          cursoId,
+          `${semanaId}/${sesionId}/examenes`,
+          `Exámenes - ${nombreCurso} - Sesión ${sesionNumero}`,
+          "Espacio reservado para exámenes, simulacros o bancos de preguntas."
+        ),
+      ],
+    };
+  });
+
+const crearSemanasCurso = (cicloId, cursoId, nombreCurso) =>
+  Array.from({ length: 5 }, (_, index) => {
+    const semanaNumero = index + 1;
+    const primeraSesion = (semanaNumero - 1) * 2 + 1;
+    const segundaSesion = primeraSesion + 1;
+
+    return {
+      id: `semana-${dosDigitos(semanaNumero)}`,
+      nombre: `Semana ${semanaNumero}`,
+      descripcion: `Sesiones ${primeraSesion} y ${segundaSesion} para organizar prácticas y exámenes.`,
+      sesiones: crearSesiones(cicloId, cursoId, nombreCurso, semanaNumero),
+    };
+  });
+
+const crearCursoAcademico = ({
+  cicloId,
+  id,
+  codigo,
+  nombre,
+  creditos,
+  horas,
+  requisitos,
+  manualCurso,
+  silabo,
+}) => ({
   id,
   codigo,
   nombre,
@@ -21,6 +80,7 @@ const crearCursoCiclo3 = ({ id, codigo, nombre, creditos, horas, requisitos, man
       ? [manualCurso]
       : [
           crearMaterialPendiente(
+            cicloId,
             id,
             "manual-del-curso",
             `Manual del curso - ${nombre}`,
@@ -31,6 +91,7 @@ const crearCursoCiclo3 = ({ id, codigo, nombre, creditos, horas, requisitos, man
       ? [silabo]
       : [
           crearMaterialPendiente(
+            cicloId,
             id,
             "silabo",
             `Sílabo - ${nombre}`,
@@ -38,36 +99,7 @@ const crearCursoCiclo3 = ({ id, codigo, nombre, creditos, horas, requisitos, man
           ),
         ],
   },
-  semanas: [
-    {
-      id: "semana-01",
-      nombre: "Semana 1",
-      descripcion: "Carpeta inicial para organizar sesiones y materiales del curso.",
-      sesiones: [
-        {
-          id: "sesion-01",
-          nombre: "Sesión 1",
-          tema: "Materiales iniciales del curso",
-          practicas: [
-            crearMaterialPendiente(
-              id,
-              "semana-01/sesion-01/practicas",
-              `Prácticas - ${nombre}`,
-              "Espacio reservado para prácticas, laboratorios o evidencias."
-            ),
-          ],
-          examenes: [
-            crearMaterialPendiente(
-              id,
-              "semana-01/sesion-01/examenes",
-              `Exámenes - ${nombre}`,
-              "Espacio reservado para exámenes, simulacros o bancos de preguntas."
-            ),
-          ],
-        },
-      ],
-    },
-  ],
+  semanas: crearSemanasCurso(cicloId, id, nombre),
 });
 
 window.CATALOGO_ACADEMICO = {
@@ -277,7 +309,8 @@ window.CATALOGO_ACADEMICO = {
       nombre: "Ciclo 3",
       descripcion: "Nivel 3: análisis, programación, bases de datos, experiencia formativa y habilidades profesionales.",
       cursos: [
-        crearCursoCiclo3({
+        crearCursoAcademico({
+          cicloId: "ciclo-03",
           id: "analisis-diseno-sistemas-i",
           codigo: "DCGS5362",
           nombre: "Análisis y Diseño de Sistemas I",
@@ -301,7 +334,8 @@ window.CATALOGO_ACADEMICO = {
             href: "downloads/ciclo-03/analisis-diseno-sistemas-i/silabo/Silabo_del_curso.pdf",
           },
         }),
-        crearCursoCiclo3({
+        crearCursoAcademico({
+          cicloId: "ciclo-03",
           id: "experiencia-formativa-situacion-real-trabajo",
           codigo: "EFSR5590",
           nombre: "Experiencia Formativa en Situación Real de Trabajo",
@@ -309,7 +343,8 @@ window.CATALOGO_ACADEMICO = {
           horas: { teo: "0h", lab: "0h", otros: "2h", total: "2h" },
           requisitos: "Experiencia Formativa en Situación Real de Trabajo o EFSR4904",
         }),
-        crearCursoCiclo3({
+        crearCursoAcademico({
+          cicloId: "ciclo-03",
           id: "desarrollo-habilidades-profesionales-iii",
           codigo: "EMPL5398",
           nombre: "Desarrollo de Habilidades Profesionales III",
@@ -317,7 +352,8 @@ window.CATALOGO_ACADEMICO = {
           horas: { teo: "0h", lab: "0h", otros: "4h", total: "4h" },
           requisitos: "No tiene requisitos.",
         }),
-        crearCursoCiclo3({
+        crearCursoAcademico({
+          cicloId: "ciclo-03",
           id: "base-datos-avanzado-i",
           codigo: "GDAT5374",
           nombre: "Base de Datos Avanzado I",
@@ -325,7 +361,8 @@ window.CATALOGO_ACADEMICO = {
           horas: { teo: "0h", lab: "0h", otros: "3h", total: "3h" },
           requisitos: "Base de Datos o GDAT4685 o GDAT2349",
         }),
-        crearCursoCiclo3({
+        crearCursoAcademico({
+          cicloId: "ciclo-03",
           id: "gestion-datos-dinamicos",
           codigo: "GDAT5460",
           nombre: "Gestión de Datos Dinámicos",
@@ -333,7 +370,8 @@ window.CATALOGO_ACADEMICO = {
           horas: { teo: "0h", lab: "0h", otros: "4h", total: "4h" },
           requisitos: "Matemática II o MATE1813",
         }),
-        crearCursoCiclo3({
+        crearCursoAcademico({
+          cicloId: "ciclo-03",
           id: "lenguaje-programacion-i",
           codigo: "PROG5483",
           nombre: "Lenguaje de Programación I",
@@ -341,13 +379,84 @@ window.CATALOGO_ACADEMICO = {
           horas: { teo: "0h", lab: "0h", otros: "4h", total: "4h" },
           requisitos: "Algoritmos y Estructura de Datos o ALED4683 o ALED1814 o ALED7670",
         }),
-        crearCursoCiclo3({
+        crearCursoAcademico({
+          cicloId: "ciclo-03",
           id: "programacion-orientada-objetos-i",
           codigo: "PROG5505",
           nombre: "Programación Orientada a Objetos I",
           creditos: 3,
           horas: { teo: "0h", lab: "0h", otros: "4h", total: "4h" },
           requisitos: "Desarrollo de Entornos Web o PROG4684 o PROG2351 o PROG7672",
+        }),
+      ],
+    },
+    {
+      id: "ciclo-04",
+      nombre: "Ciclo 4",
+      descripcion: "Nivel 4: programación avanzada, datos, servicios de TI, análisis de sistemas y experiencia formativa.",
+      cursos: [
+        crearCursoAcademico({
+          cicloId: "ciclo-04",
+          id: "experiencia-formativa-situacion-real-trabajo",
+          codigo: "EFSR5591",
+          nombre: "Experiencia Formativa en Situación Real de Trabajo",
+          creditos: 2,
+          horas: { teo: "0h", lab: "0h", otros: "4h", total: "4h" },
+          requisitos: "Experiencia Formativa en Situación Real de Trabajo o EFSR4906",
+        }),
+        crearCursoAcademico({
+          cicloId: "ciclo-04",
+          id: "desarrollo-habilidades-profesionales-iv",
+          codigo: "EMPL5399",
+          nombre: "Desarrollo de Habilidades Profesionales IV",
+          creditos: 3,
+          horas: { teo: "0h", lab: "0h", otros: "4h", total: "4h" },
+          requisitos: "No tiene requisitos.",
+        }),
+        crearCursoAcademico({
+          cicloId: "ciclo-04",
+          id: "base-datos-avanzado-ii",
+          codigo: "GDAT5375",
+          nombre: "Base de Datos Avanzado II",
+          creditos: 3,
+          horas: { teo: "0h", lab: "0h", otros: "4h", total: "4h" },
+          requisitos: "Base de Datos Avanzado I o GDAT4686 o GDAT2393",
+        }),
+        crearCursoAcademico({
+          cicloId: "ciclo-04",
+          id: "lenguaje-programacion-ii",
+          codigo: "PROG5484",
+          nombre: "Lenguaje de Programación II",
+          creditos: 3,
+          horas: { teo: "0h", lab: "0h", otros: "3h", total: "3h" },
+          requisitos: "Lenguaje de Programación I o PROG4688 o PROG1891",
+        }),
+        crearCursoAcademico({
+          cicloId: "ciclo-04",
+          id: "programacion-orientada-objetos-ii",
+          codigo: "PROG5506",
+          nombre: "Programación Orientada a Objetos II",
+          creditos: 3,
+          horas: { teo: "0h", lab: "0h", otros: "3h", total: "3h" },
+          requisitos: "Programación Orientada a Objetos I o PROG4689 o PROG1892",
+        }),
+        crearCursoAcademico({
+          cicloId: "ciclo-04",
+          id: "gestion-servicios-ti",
+          codigo: "SPTI5445",
+          nombre: "Gestión de Servicios de TI",
+          creditos: 3,
+          horas: { teo: "0h", lab: "0h", otros: "4h", total: "4h" },
+          requisitos: "Gestión de Datos Dinámicos o GDAT2394",
+        }),
+        crearCursoAcademico({
+          cicloId: "ciclo-04",
+          id: "analisis-diseno-sistemas-ii",
+          codigo: "DCGS5363",
+          nombre: "Análisis y Diseño de Sistemas II",
+          creditos: 3,
+          horas: { teo: "2h", lab: "2h", otros: "4h", total: "8h" },
+          requisitos: "Análisis y Diseño de Sistemas I o DCGS2392",
         }),
       ],
     },
