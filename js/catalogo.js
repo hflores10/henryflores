@@ -12,6 +12,8 @@ const crearMaterialPendiente = (cicloId, cursoId, carpeta, titulo, descripcion) 
   href: `downloads/${cicloId}/${cursoId}/${carpeta}/sube-aqui.txt`,
 });
 
+const normalizarMateriales = (materiales) => (Array.isArray(materiales) ? materiales : [materiales]);
+
 const crearSesiones = (cicloId, cursoId, nombreCurso, semanaNumero) =>
   [1, 2].map((posicion) => {
     const sesionNumero = (semanaNumero - 1) * 2 + posicion;
@@ -77,7 +79,7 @@ const crearCursoAcademico = ({
   descripcion: `${codigo} · ${creditos} créditos · ${horas.total} total.`,
   documentos: {
     manualCurso: manualCurso
-      ? [manualCurso]
+      ? normalizarMateriales(manualCurso)
       : [
           crearMaterialPendiente(
             cicloId,
@@ -88,7 +90,7 @@ const crearCursoAcademico = ({
           ),
         ],
     silabo: silabo
-      ? [silabo]
+      ? normalizarMateriales(silabo)
       : [
           crearMaterialPendiente(
             cicloId,
@@ -239,6 +241,42 @@ window.CATALOGO_ACADEMICO = {
           creditos: 4,
           horas: { teo: "0h", lab: "0h", otros: "5h", total: "5h" },
           requisitos: "Introducción a la Algoritmia o ALED2326 o ALED7669",
+          manualCurso: [
+            {
+              titulo: "Manual del curso - Algoritmos y Estructura de Datos",
+              descripcion: "Manual oficial del curso en formato PDF.",
+              tipo: "PDF",
+              tamano: "4.1 MB",
+              actualizado: "2026-08-08",
+              href: "downloads/ciclo-02/algoritmos-estructura-datos/manual-del-curso/manual-algoritmos-estructura-datos.pdf",
+            },
+            {
+              titulo: "Guía del curso - Algoritmos y Estructura de Datos",
+              descripcion: "Guía del curso en formato PDF.",
+              tipo: "PDF",
+              tamano: "223 KB",
+              actualizado: "2026-08-08",
+              href: "downloads/ciclo-02/algoritmos-estructura-datos/manual-del-curso/guia-del-curso.pdf",
+            },
+          ],
+          silabo: [
+            {
+              titulo: "Sílabo - Algoritmos y Estructura de Datos",
+              descripcion: "Sílabo del curso en formato PDF.",
+              tipo: "PDF",
+              tamano: "300 KB",
+              actualizado: "2026-08-08",
+              href: "downloads/ciclo-02/algoritmos-estructura-datos/silabo/silabo-del-curso.pdf",
+            },
+            {
+              titulo: "Proyecto del curso - Algoritmos y Estructura de Datos",
+              descripcion: "Archivo del proyecto del curso en formato PDF.",
+              tipo: "PDF",
+              tamano: "370 KB",
+              actualizado: "2026-08-08",
+              href: "downloads/ciclo-02/algoritmos-estructura-datos/silabo/proyecto-del-curso-algoritmos-estructura-datos.pdf",
+            },
+          ],
         }),
         crearCursoAcademico({
           cicloId: "ciclo-02",
