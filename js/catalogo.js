@@ -399,6 +399,32 @@ window.CATALOGO_ACADEMICO = {
           creditos: 2,
           horas: { teo: "0h", lab: "0h", otros: "4h", total: "4h" },
           requisitos: "Matemática II o MATE1813",
+          manualCurso: [
+            {
+              titulo: "Manual del curso - Gestión de Datos Dinámicos",
+              descripcion: "Manual oficial del curso en formato PDF.",
+              tipo: "PDF",
+              tamano: "31.5 MB",
+              actualizado: "2026-08-08",
+              href: "downloads/ciclo-03/gestion-datos-dinamicos/manual-del-curso/manual-gestion-datos-dinamicos.pdf",
+            },
+            {
+              titulo: "Guía del curso - Gestión de Datos Dinámicos",
+              descripcion: "Guía del curso en formato PDF.",
+              tipo: "PDF",
+              tamano: "183 KB",
+              actualizado: "2026-08-08",
+              href: "downloads/ciclo-03/gestion-datos-dinamicos/manual-del-curso/guia-del-curso.pdf",
+            },
+          ],
+          silabo: {
+            titulo: "Sílabo - Gestión de Datos Dinámicos",
+            descripcion: "Sílabo del curso en formato PDF.",
+            tipo: "PDF",
+            tamano: "211 KB",
+            actualizado: "2026-08-08",
+            href: "downloads/ciclo-03/gestion-datos-dinamicos/silabo/silabo-del-curso.pdf",
+          },
         }),
         crearCursoAcademico({
           cicloId: "ciclo-03",
