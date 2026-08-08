@@ -304,6 +304,42 @@ window.CATALOGO_ACADEMICO = {
           creditos: 4,
           horas: { teo: "0h", lab: "0h", otros: "5h", total: "5h" },
           requisitos: "Tecnologías de la Información o SPTI2334",
+          manualCurso: [
+            {
+              titulo: "Proyecto del curso - Base de Datos",
+              descripcion: "Documento del proyecto del curso en formato PDF.",
+              tipo: "PDF",
+              tamano: "572 KB",
+              actualizado: "2026-08-08",
+              href: "downloads/ciclo-02/base-datos/manual-del-curso/proyecto-del-curso-base-datos.pdf",
+            },
+            {
+              titulo: "Proyecto Base de Datos Alojamiento - Demo",
+              descripcion: "Documento demo del proyecto de alojamiento en formato PDF.",
+              tipo: "PDF",
+              tamano: "786 KB",
+              actualizado: "2026-08-08",
+              href: "downloads/ciclo-02/base-datos/manual-del-curso/proyecto-base-datos-alojamiento-demo.pdf",
+            },
+          ],
+          silabo: [
+            {
+              titulo: "Sílabo - Base de Datos",
+              descripcion: "Sílabo del curso en formato PDF.",
+              tipo: "PDF",
+              tamano: "302 KB",
+              actualizado: "2026-08-08",
+              href: "downloads/ciclo-02/base-datos/silabo/silabo-base-datos.pdf",
+            },
+            {
+              titulo: "Rúbrica de Evaluación de Proyectos de BD",
+              descripcion: "Rúbrica de evaluación de proyectos en formato Excel.",
+              tipo: "XLSX",
+              tamano: "15 KB",
+              actualizado: "2026-08-08",
+              href: "downloads/ciclo-02/base-datos/silabo/rubrica-evaluacion-proyectos-bd.xlsx",
+            },
+          ],
         }),
         crearCursoAcademico({
           cicloId: "ciclo-02",
