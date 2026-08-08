@@ -12,13 +12,23 @@ Sitio web estático para GitHub Pages con un navegador de materiales académicos
 
 ## Ciclos académicos
 
-El catálogo incluye los ciclos 1, 2, 3 y 4. Para los ciclos 3 y 4, cada curso tiene:
+El catálogo incluye los ciclos 1, 2, 3 y 4. Para los ciclos 2, 3 y 4, cada curso tiene:
 
 - `manual-del-curso`
 - `silabo`
 - `semana-01` a `semana-05`
 - 2 sesiones por semana hasta completar `sesion-01` a `sesion-10`
 - carpetas `practicas` y `examenes` dentro de cada sesión
+
+## Ciclo 2
+
+- `ALED5358`: Algoritmos y Estructura de Datos.
+- `EFSR5589`: Experiencia Formativa en Situación Real de Trabajo.
+- `EMPL5397`: Desarrollo de Habilidades Profesionales II.
+- `GDAT5373`: Base de Datos.
+- `MATE5491`: Matemática II.
+- `PRNG5492`: Modelado de Procesos de Negocio.
+- `PROG5394`: Desarrollo de Entornos Web.
 
 ## Ciclo 3
 
