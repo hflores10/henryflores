@@ -1,4 +1,5 @@
 const FECHA_ACTUALIZACION = "2026-08-06";
+const FECHA_AUDIO_INGLES = "2026-08-13";
 
 const dosDigitos = (numero) => String(numero).padStart(2, "0");
 
@@ -14,13 +15,30 @@ const crearMaterialPendiente = (cicloId, cursoId, carpeta, titulo, descripcion) 
 
 const normalizarMateriales = (materiales) => (Array.isArray(materiales) ? materiales : [materiales]);
 
-const crearSesiones = (cicloId, cursoId, nombreCurso, semanaNumero) =>
+const crearAudiosSesion = (cicloId, cursoId, semanaId, sesionId, nombreCurso, sesionNumero) => {
+  if (cursoId === "ingles" && sesionNumero === 1) {
+    return [
+      {
+        titulo: "English Language Instruction - Past Tense and Common Phrases",
+        descripcion: "Audio de práctica para pasado simple y frases comunes en inglés.",
+        tipo: "MP3",
+        tamano: "19.5 MB",
+        actualizado: FECHA_AUDIO_INGLES,
+        href: `downloads/${cicloId}/${cursoId}/${semanaId}/${sesionId}/audios/English Language Instruction_ Past Tense and Common Phrases.mp3`,
+      },
+    ];
+  }
+
+  return [];
+};
+
+const crearSesiones = (cicloId, cursoId, nombreCurso, semanaNumero, opciones = {}) =>
   [1, 2].map((posicion) => {
     const sesionNumero = (semanaNumero - 1) * 2 + posicion;
     const semanaId = `semana-${dosDigitos(semanaNumero)}`;
     const sesionId = `sesion-${dosDigitos(sesionNumero)}`;
 
-    return {
+    const sesion = {
       id: sesionId,
       nombre: `Sesión ${sesionNumero}`,
       tema: `Materiales de ${nombreCurso} - Sesión ${sesionNumero}`,
@@ -43,19 +61,28 @@ const crearSesiones = (cicloId, cursoId, nombreCurso, semanaNumero) =>
         ),
       ],
     };
+
+    if (opciones.generarAudios) {
+      sesion.audios = crearAudiosSesion(cicloId, cursoId, semanaId, sesionId, nombreCurso, sesionNumero);
+    }
+
+    return sesion;
   });
 
-const crearSemanasCurso = (cicloId, cursoId, nombreCurso) =>
+const crearSemanasCurso = (cicloId, cursoId, nombreCurso, opciones = {}) =>
   Array.from({ length: 5 }, (_, index) => {
     const semanaNumero = index + 1;
     const primeraSesion = (semanaNumero - 1) * 2 + 1;
     const segundaSesion = primeraSesion + 1;
+    const descripcion = opciones.generarAudios
+      ? `Sesiones ${primeraSesion} y ${segundaSesion} para organizar prácticas, exámenes y audios.`
+      : `Sesiones ${primeraSesion} y ${segundaSesion} para organizar prácticas y exámenes.`;
 
     return {
       id: `semana-${dosDigitos(semanaNumero)}`,
       nombre: `Semana ${semanaNumero}`,
-      descripcion: `Sesiones ${primeraSesion} y ${segundaSesion} para organizar prácticas y exámenes.`,
-      sesiones: crearSesiones(cicloId, cursoId, nombreCurso, semanaNumero),
+      descripcion,
+      sesiones: crearSesiones(cicloId, cursoId, nombreCurso, semanaNumero, opciones),
     };
   });
 
@@ -66,15 +93,22 @@ const crearCursoAcademico = ({
   nombre,
   creditos,
   horas,
+  profesor,
+  codigoCurso,
+  nivel,
   requisitos,
   manualCurso,
   silabo,
+  generarAudios = false,
 }) => ({
   id,
   codigo,
   nombre,
   creditos,
   horas,
+  profesor,
+  codigoCurso,
+  nivel,
   requisitos,
   descripcion: `${codigo} · ${creditos} créditos · ${horas.total} total.`,
   documentos: {
@@ -101,8 +135,45 @@ const crearCursoAcademico = ({
           ),
         ],
   },
-  semanas: crearSemanasCurso(cicloId, id, nombre),
+  semanas: crearSemanasCurso(cicloId, id, nombre, { generarAudios }),
 });
+
+const crearDocumentoIngles = (cicloId, carpeta, titulo, descripcion) => ({
+  titulo,
+  descripcion,
+  tipo: "TXT",
+  tamano: "1 KB",
+  actualizado: FECHA_AUDIO_INGLES,
+  estado: "Pendiente",
+  href: `downloads/${cicloId}/ingles/${carpeta}/sube-aqui.txt`,
+});
+
+const crearCursoIngles = ({ cicloId, codigo, codigoCurso, profesor, nivel, requisitos }) =>
+  crearCursoAcademico({
+    cicloId,
+    id: "ingles",
+    codigo,
+    codigoCurso,
+    nombre: "Inglés",
+    profesor,
+    nivel,
+    creditos: 2,
+    horas: { teo: "1h", lab: "2h", otros: "1h", total: "4h" },
+    requisitos,
+    generarAudios: true,
+    manualCurso: crearDocumentoIngles(
+      cicloId,
+      "manual-del-curso",
+      "Manual del curso - Inglés",
+      "Espacio reservado para el manual del curso de Inglés."
+    ),
+    silabo: crearDocumentoIngles(
+      cicloId,
+      "silabo",
+      "Sílabo - Inglés",
+      "Espacio reservado para el sílabo del curso de Inglés."
+    ),
+  });
 
 window.CATALOGO_ACADEMICO = {
   propietario: {
@@ -226,6 +297,14 @@ window.CATALOGO_ACADEMICO = {
             },
           ],
         },
+        crearCursoIngles({
+          cicloId: "ciclo-01",
+          codigo: "INGL1401",
+          codigoCurso: "ING-A1-1401",
+          profesor: "Valeria Quispe Navarro",
+          nivel: "Inglés básico A1",
+          requisitos: "No tiene requisitos.",
+        }),
       ],
     },
     {

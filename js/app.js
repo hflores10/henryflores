@@ -19,7 +19,7 @@
     "Selecciona un curso",
     "Selecciona documentos o una semana",
     "Selecciona una sesión",
-    "Selecciona prácticas, manuales o exámenes",
+    "Selecciona prácticas, manuales, audios o exámenes",
     "Descarga el material",
   ];
 
@@ -52,6 +52,12 @@
       key: "manuales",
       nombre: "Manuales",
       descripcion: "Guías, lecturas y referencias de la sesión.",
+    },
+    {
+      id: "audios",
+      key: "audios",
+      nombre: "Audios",
+      descripcion: "Pistas cortas en MP3 para escucha, vocabulario y pronunciación.",
     },
     {
       id: "examenes",
@@ -459,7 +465,7 @@
     if (item.codigo) return getCourseChildren(item).length;
     if (item.files) return item.files.length;
     if (item.sesiones) return item.sesiones.length;
-    if (item.practicas || item.manuales || item.examenes) return getSessionCategories(item).length;
+    if (item.practicas || item.manuales || item.audios || item.examenes) return getSessionCategories(item).length;
     if (item.semanas) return item.semanas.length;
     return 0;
   }
@@ -470,7 +476,7 @@
     if (item.files) return "Documentos";
     if (item.semanas) return "Curso";
     if (item.sesiones) return "Semana";
-    if (item.practicas || item.manuales || item.examenes) return "Sesión";
+    if (item.practicas || item.manuales || item.audios || item.examenes) return "Sesión";
     return "Carpeta";
   }
 
@@ -479,6 +485,9 @@
 
     if (selected.codigo) {
       rows.push(["Código", selected.codigo]);
+      if (selected.codigoCurso) rows.push(["Código curso", selected.codigoCurso]);
+      if (selected.nivel) rows.push(["Nivel", selected.nivel]);
+      if (selected.profesor) rows.push(["Profesor", selected.profesor]);
       rows.push(["Créditos", String(selected.creditos || "No indicado")]);
       rows.push(["Horas", formatHours(selected.horas)]);
       rows.push(["Requisitos", selected.requisitos || "No tiene requisitos."]);

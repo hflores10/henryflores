@@ -6,7 +6,7 @@ Sitio web estático para GitHub Pages con un navegador de materiales académicos
 
 - `index.html`: página principal.
 - `css/styles.css`: estilos del sitio.
-- `js/catalogo.js`: datos de ciclos, cursos, semanas, sesiones, prácticas, manuales, sílabos y exámenes.
+- `js/catalogo.js`: datos de ciclos, cursos, semanas, sesiones, prácticas, manuales, audios, sílabos y exámenes.
 - `js/app.js`: lógica del navegador.
 - `downloads/`: archivos que se descargan desde la web.
 
@@ -19,6 +19,14 @@ El catálogo incluye los ciclos 1, 2, 3 y 4. Para los ciclos 2, 3 y 4, cada curs
 - `semana-01` a `semana-05`
 - 2 sesiones por semana hasta completar `sesion-01` a `sesion-10`
 - carpetas `practicas` y `examenes` dentro de cada sesión
+
+El curso `Inglés` se agregó solamente en el ciclo 1, replicando la jerarquía base de un curso del ciclo 2 y con una carpeta adicional `audios` dentro de cada sesión para publicar múltiples archivos cortos en formato MP3.
+
+## Ciclo 1
+
+- Desarrollo Web.
+- Redes y Soporte.
+- `INGL1401`: Inglés.
 
 ## Ciclo 2
 
