@@ -210,7 +210,7 @@ window.CATALOGO_ACADEMICO = {
                 tipo: "PDF",
                 tamano: "1.2 MB",
                 actualizado: "2026-08-06",
-                href: "downloads/ciclo-01/desarrollo-web/silabo/silabo_del_curso.pdf",
+                href: "downloads/ciclo-01/desarrollo-web/silabo/Silabo_del_curso.pdf",
               },
             ],
           },
