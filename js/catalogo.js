@@ -191,7 +191,31 @@ window.CATALOGO_ACADEMICO = {
           id: "desarrollo-web",
           nombre: "Desarrollo Web",
           descripcion: "HTML, CSS, JavaScript y publicación de sitios estáticos.",
-          semanas: [
+
+          documentos: {
+            manualCurso: [
+              {
+                titulo: "Manual del curso - Desarrollo Web",
+                descripcion: "Manual oficial del curso en formato PDF.",
+                tipo: "PDF",
+                tamano: "11.6 MB",
+                actualizado: "2026-08-06",
+                href: "downloads/ciclo-01/desarrollo-web/manual-del-curso/manual-desarrollo-web.pdf",
+              },
+            ],
+            silabo: [
+              {
+                titulo: "Sílabo - Desarrollo Web",
+                descripcion: "Sílabo del curso en formato PDF.",
+                tipo: "PDF",
+                tamano: "1.2 MB",
+                actualizado: "2026-08-06",
+                href: "downloads/ciclo-01/desarrollo-web/silabo/silabo-desarrollo-web.pdf",
+              },
+            ],
+          },
+          
+          semanas: [  
             {
               id: "semana-01",
               nombre: "Semana 1",
